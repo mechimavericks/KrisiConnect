@@ -12,4 +12,8 @@ class ProductController extends Controller
         $products = Product::all(); 
         return view('marketplace.index', compact('products'));
     }
+    public function create()
+    {
+        return view('marketplace.create');
+    }
 }

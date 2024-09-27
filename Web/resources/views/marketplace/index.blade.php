@@ -59,13 +59,56 @@
             @endforeach
         </div>
     </section>
+    @if (Auth::user() && Auth::user()->phone_number)
+        <a href="{{ route('marketplace.create') }}"
+           class="bg-[#4CAF50] text-white rounded-full flex justify-around py-3 fixed bottom-24 w-12 left-0 right-0 mx-auto max-w-sm">
+            <i class="bx bx-plus"></i>
+        </a>
+    @else
+        <a id="createProfileBtn" href="#"
+           class="bg-red-500 text-white rounded-full flex justify-center py-3 fixed bottom-24 w-48 left-0 right-0 mx-auto max-w-sm">
+            विक्रेता प्रोफाइल बनाउनुहोस्
+        </a>
+    @endif
+
+    @include('footer')
+</div>
+
+<div id="createProfileModal" class="fixed z-50 inset-0 hidden bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-5 rounded-lg max-w-sm w-full">
+        <h2 class="text-xl font-bold mb-4 text-center">प्रोफाइल बनाउनुहोस्</h2>
+        <form id="createProfileForm" action="/user/update-phone" method="POST">
+            @csrf
+            <label for="phone_number" class="block mb-2 text-gray-700">फोन नम्बर:</label>
+            <input type="text" name="phone_number" id="phone_number" placeholder="फोन नम्बर प्रविष्ट गर्नुहोस्"
+                   class="p-2 border text-black border-gray-300 rounded w-full mb-4" required>
+
+            <button type="submit" class="w-full bg-green-500 text-white py-2 rounded">पठाउनुहोस्</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const createProfileBtn = document.getElementById('createProfileBtn');
+    const createProfileModal = document.getElementById('createProfileModal');
+
+    createProfileBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        createProfileModal.classList.remove('hidden');
+    });
+
+    createProfileModal.addEventListener('click', function (event) {
+        if (event.target === createProfileModal) {
+            createProfileModal.classList.add('hidden');
+        }
+    });
+</script>
+
 
    
 
     
 
-    @include('footer')
-</div>
 
  
 
