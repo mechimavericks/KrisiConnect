@@ -14,10 +14,10 @@
     <header class="flex justify-between items-center mb-6">
         <div>
             <div class="text-lg">शुभ प्रभात,</div>
-            <div class="text-4xl font-bold mt-2 w-64">Sanket Shiwakoti</div>
+            <div class="text-4xl font-bold mt-2 w-64">{{Auth::user()->name}}</div>
         </div>
         <div class="w-12 h-12 rounded-full overflow-hidden">
-            <p alt="Profile Picture" class="w-full h-full object-cover text-center pt-3 font-extrabold text-xl bg-blue-600 self-start">S</p>
+            <p alt="Profile Picture" class="w-full h-full object-cover text-center pt-3 font-extrabold text-xl bg-blue-600 self-start">{{Auth::user()->name[0]}}</p>
         </div>
     </header>
 
@@ -26,8 +26,8 @@
         <p class="p-2">आजको तापक्रम विभरण</p>
 
         <div class="p-4 flex justify-between items-center">
-        <div class="text-3xl font-bold flex">28°
-        <img src="/image4.png"></div>
+        <div class="text-3xl font-bold flex">18°
+        <img src="https://ssl.gstatic.com/onebox/weather/64/rain.png"></div>
 
         <div class="  h-16 bg-white mx-1" style="border:1px solid white;width:1px"></div>
 
