@@ -11,7 +11,7 @@ Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallbac
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('/dashboard', function () {
