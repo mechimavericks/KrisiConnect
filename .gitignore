@@ -3,12 +3,12 @@
 /Python/disease/__pycache__
 /apikey.txt
 /Python/chatbot/temp.py
-/Python/.env
+# /Python/.env
 /python/chatbot/__pycache__
 /python/disease/__pycache__
 /.venv
 /python/disease/runs
-.env
+# .env
 /python/disease/static/uploads
 
 
@@ -20,7 +20,7 @@
 /IOT/temp.py
 
 /IOT
-.env
+# .env
 
 
 /Python/disease/venv
@@ -31,3 +31,4 @@
 /Python/disease/static
 /runs
 /Python/main.py
+/Python/__pycache__
