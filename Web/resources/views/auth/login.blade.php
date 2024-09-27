@@ -1,47 +1,27 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Krishi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-cover bg-center" style="background-image: url('/image1.png');">
+<div class="flex flex-col items-center justify-between h-screen bg-black bg-opacity-40 text-white">
+    <div class="text-center pt-16">
+        <h1 class="font-extralight mb-2">तपाईलाई</h1>
+        <h2 class="text-6xl font-extrabold mb-2">Krishi Connect</h2>
+        <p class="font-extralight mb-6">मा स्वागत छ।</p>
+    </div>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <div class="bg-white p-4  shadow-lg text-center flex flex-col justify-evenly items-center w-full opacity-80 h-60" style="border-radius:60px 60px 0px 0px;">
+        <p class="text-black text-2xl font-bold mb-4">Krishi Connect <span class="font-light">चलाउन लग ईन गर्नुहोस्।</span></p>
+        <a href="{{route('auth.google')}}" class="flex bg-blue-600 items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white hover:bg-blue-800 h-12 w-8/12">
+            <img src="https://cdn2.hubspot.net/hubfs/53/image8-2.jpg" alt="Google Logo" class="h-10 w-12 objeect-contain mr-2">
+            <span class="font-bold text-white">Sign up with Google</span>
+        </a>
+        <p class="text-gray-500 text-xs mt-4">तपाइँको गुगल खाता सुरक्षित हुन्छ।</p>
+    </div>
+</div>
+</body>
+</html>
