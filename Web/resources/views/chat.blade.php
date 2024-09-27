@@ -136,10 +136,11 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    const botResponse = data.response.response;
+
+                    console.log(data.response)
 
                     // Display bot's response in the chatbox
-                    displayMessage(botResponse, false);
+                    displayMessage(data.response, false);
                 } else {
                     console.error('Error in fetching response:', response.statusText);
                 }
