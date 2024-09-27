@@ -16,7 +16,7 @@ print(apikey)
 
 app = FastAPI()
 
-model = YOLO("disease.pt")
+model = YOLO("last.pt")
 
 
 UPLOAD_FOLDER = 'static/uploads'
