@@ -60,7 +60,7 @@
     <section class="mb-6">
         <h2 class="text-xl mb-4">रोचक भिडियोहरु</h2>
         <iframe class="w-full" src="https://www.youtube.com/embed/ZpDJycIVrbo?si=MOcrN7grsHbpFMv3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>    </section>
-   <iframe class="w-full" src="https://www.youtube.com/embed/weHOhgNybGQ?si=JwD1Myq0QcmBNCrK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+   <!-- <iframe class="w-full" src="https://www.youtube.com/embed/weHOhgNybGQ?si=JwD1Myq0QcmBNCrK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe> -->
     <!-- Footer -->
 @include('footer')
 </div>

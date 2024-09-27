@@ -16,7 +16,7 @@
         <i class='bx bx-arrow-back text-xl'></i>
         <span class="ml-2">फर्कनुहोस्</span>
     </a>
-    
+
     <h1 class="text-2xl font-semibold mb-4">नयाँ उत्पादन थप्नुहोस्</h1>
 
     @if ($errors->any())
@@ -54,12 +54,10 @@
 
         <button type="submit" class="bg-[#4CAF50] text-white p-3 rounded-lg w-full">उत्पादन सिर्जना गर्नुहोस्</button>
 
-        @include('footer')
     </form>
 
-
-
 </div>
+@include('footer')
 
 </body>
 </html>

@@ -1,0 +1,44 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# <IfModule mod_expires.c>
+#     ExpiresActive On
+
+#     # Enable long caching for static files
+#     ExpiresByType application/javascript "access plus 1 month"
+#     ExpiresByType application/x-javascript "access plus 1 month"
+#     ExpiresByType text/javascript "access plus 1 month"
+#     ExpiresByType text/css "access plus 1 month"
+#     ExpiresByType image/gif "access plus 1 month"
+#     ExpiresByType image/jpeg "access plus 1 month"
+#     ExpiresByType image/png "access plus 1 month"
+#     ExpiresByType image/svg+xml "access plus 1 month"
+#     ExpiresByType image/x-icon "access plus 1 month"
+
+#     # HTML files should not be cached for too long
+#     ExpiresByType text/html "access plus 600 seconds"
+#     ExpiresByType application/xhtml+xml "access plus 600 seconds"
+# </IfModule>
+
+<IfModule mod_headers.c>
+    # Enable compression and caching for static resources
+    <FilesMatch "\.(js|css|png|jpg|jpeg|gif|svg|ico)$">
+        Header set Cache-Control "public, max-age=2592000, immutable"
+    </FilesMatch>
+
+    # Ensure HTML pages are not cached to reflect dynamic content updatesphp artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+
+    <FilesMatch "\.(html|xhtml)$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+    # Enable Gzip compression for text-based resources
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>

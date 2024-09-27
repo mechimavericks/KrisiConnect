@@ -11,7 +11,8 @@ return [
     | by the framework. The "local" disk, as well as a variety of cloud
     | based disks are available to your application for file storage.
     |
-    *
+    */
+
     'default' => env('FILESYSTEM_DISK', 'local'),
 
     /*
@@ -31,8 +32,14 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => storage_path('app/private'),
             'serve' => true,
+'public' => [
+    'driver' => 'local',
+    'root' => storage_path('app/public'), // This must be correct
+    'url' => env('APP_URL').'/storage',
+    'visibility' => 'public',
+],
             'throw' => false,
         ],
 
@@ -40,7 +47,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
+mm-um-u            'visibility' => 'public',
             'throw' => false,
         ],
 
