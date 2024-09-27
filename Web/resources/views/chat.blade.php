@@ -100,7 +100,7 @@
         function displayMessage(message, isUser = true) {
             const messageDiv = document.createElement('div');
             messageDiv.className = isUser ? 'user-message' : 'bot-message';
-            messageDiv.textContent = message;
+            messageDiv.innerHTML = message; // Use innerHTML to display HTML content
             chatbox.appendChild(messageDiv);
             chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
 
@@ -113,84 +113,41 @@
             }
         }
 
-        
-    });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const chatForm = document.getElementById('chatForm');
-    const chatbox = document.getElementById('chatbox');
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value;
 
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const messageInput = document.getElementById('message');
-        const message = messageInput.value;
+            // Clear input
+            messageInput.value = '';
 
-        // Clear input
-        messageInput.value = '';
+            // Display user message in the chatbox
+            displayMessage(message, true);
 
-        // Display user message in the chatbox
-        chatbox.innerHTML += `
-            <div class="user-message">${message}</div>
-        `;
+            // Make API request to FastAPI backend
+            try {
+                const response = await fetch('http://127.0.0.1:8001/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: message }),
+                });
 
-        // Make API request to FastAPI backend
-        try {
-            const response = await fetch('http://127.0.0.1:8001/chat/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ question: message }),
-            });
+                if (response.ok) {
+                    const data = await response.json();
+                    const botResponse = data.response.response;
 
-            if (response.ok) {
-                const data = await response.json();
-                const botResponse = data.result.response;
-
-                // Append bot's response with a "Speak" button to the chatbox
-                chatbox.innerHTML += `
-                    <div class="bot-message-container">
-                        <div class="bot-message">${botResponse}</div>
-                        <button class="speak-btn">🔊</button>
-                    </div>
-                `;
-
-                // Re-attach event listeners to the new "Speak" buttons
-                attachSpeakButtonListeners();
-            } else {
-                console.error('Error in fetching response:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
-
-    function attachSpeakButtonListeners() {
-        const speakButtons = document.querySelectorAll('.speak-btn');
-        speakButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Find the nearest .bot-message element within the same container
-                const messageContainer = this.closest('.bot-message-container');
-                const messageElement = messageContainer.querySelector('.bot-message');
-
-                if (messageElement) {
-                    const message = messageElement.textContent.trim();
-                    speakText(message);
+                    // Display bot's response in the chatbox
+                    displayMessage(botResponse, false);
                 } else {
-                    console.error('Error: .bot-message element not found');
+                    console.error('Error in fetching response:', response.statusText);
                 }
-            });
+            } catch (error) {
+                console.error('Error:', error);
+            }
         });
-    }
-
-    function speakText(text) {
-        // alert(text);
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'hi-IN'; // You can set this to any supported language code
-        speechSynthesis.speak(utterance);
-    }
-});
+    });
 </script>
 </body>
 </html>
