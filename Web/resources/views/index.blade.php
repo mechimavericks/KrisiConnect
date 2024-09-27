@@ -62,12 +62,7 @@
         <iframe class="w-full" src="https://www.youtube.com/embed/ZpDJycIVrbo?si=MOcrN7grsHbpFMv3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>    </section>
    <iframe class="w-full" src="https://www.youtube.com/embed/weHOhgNybGQ?si=JwD1Myq0QcmBNCrK" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
     <!-- Footer -->
-<footer class="bg-[#1e2945] flex justify-around py-3 rounded-2xl fixed bottom-5 left-0 right-0 mx-auto max-w-sm">
-    <div class="text-3xl"><a href="/"><i class="bx bx-home"></i></a></div>
-    <div class="text-3xl"><a href="/scan"><i class="bx bx-scan"></i></a></div>
-    <div class="text-3xl"><a href="/marketplace"><i class="bx bx-store-alt"></i></a></div>
-    <div class="text-3xl"><a href="http://localhost:8000/chat"><i class="bx bxs-bot"></i></a></div>
-</footer>
+@include('footer')
 </div>
 
 <script src="”http://localhost:8000/sw.js”">
