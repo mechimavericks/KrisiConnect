@@ -89,6 +89,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        dd($product);
         return view('marketplace.edit', compact('product'));
     }
 

@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/create', [ProductController::class, 'create'])->name('marketplace.create');
     Route::post('/products', [ProductController::class, 'store'])->name('marketplace.store');
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('marketplace.show');
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('marketplace.edit');
+    // Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('marketplace.edit');
     // Route::put('/products/{product}', [ProductController::class, 'update'])->name('marketplace.update');
     // Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('marketplace.destroy');
 

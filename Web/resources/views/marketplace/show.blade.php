@@ -14,7 +14,7 @@
     <!-- Product Details -->
     <div class=" text-white-900 rounded-lg shadow-lg overflow-hidden">
         @if ($product->image)
-            <img src="uploads/gallery/gallery_file/{{$product->image}}" alt="{{ $product->name }}" class="w-full h-80 object-cover">
+            <img src="/uploads/gallery/gallery_file/{{$product->image}}" alt="{{ $product->name }}" class="w-full h-80 object-cover">
         @else
             <div class="w-full h-80 bg-gray-200 flex items-center justify-center">
                 <span class="text-white-500">No Image</span>
