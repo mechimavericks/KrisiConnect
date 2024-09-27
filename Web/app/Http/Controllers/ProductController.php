@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('user')->get(); // Fetch all products with their associated user
+        $products = Product::all(); 
         return view('marketplace.index', compact('products'));
     }
 }
