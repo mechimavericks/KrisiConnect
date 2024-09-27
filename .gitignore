@@ -11,6 +11,7 @@
 # .env
 /python/disease/static/uploads
 
+/Python/static
 
 
 
@@ -30,5 +31,8 @@
 
 /Python/disease/static
 /runs
-/Python/main.py
 /Python/__pycache__
+
+
+
+# /Python/main.py
