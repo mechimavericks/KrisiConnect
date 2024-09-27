@@ -32,6 +32,7 @@ def generate_summary(disease):
         5. रोगको छान्ने उपाय (Curing the disease)
         6. रोगको रोकथाम (Preventing the disease)
         7. रोगको उपचार विधिहरू (Treatment Methods)
+        8. रोगको रोकथाम (Preventing the disease)
         '''
     )
     llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=api_key)
@@ -73,7 +74,7 @@ def predict_disease():
     
     return render_template_string(index_template)
 
-# HTML templates
+
 index_template = '''
 <!DOCTYPE html>
 <html lang="en">
