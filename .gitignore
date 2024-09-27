@@ -19,3 +19,8 @@
 
 /IOT
 .env
+
+
+/Python/disease/venv
+/Python/disease/__pycache__
+/Python/disease/disease.pt
