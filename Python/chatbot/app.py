@@ -86,12 +86,37 @@ def is_greeting(query):
     return any(greeting in query.lower() for greeting in greetings)
 
 def get_agriculture_response(query):
-    chat_prompt = ChatPromptTemplate.from_template(
-        '''You are an AI assistant specialized in agriculture and plant-related topics. 
-        Provide a helpful response to the following query: {query}
-        If the query is not related to agriculture or plants, politely explain that you can only answer questions about agriculture and plants.
-        IMPORTANT: Respond ONLY in Nepali language. Do not use any English.'''
-    )
+    # List of agriculture-related keywords
+    agriculture_keywords = ["farm", "farming", "agriculture", "crop", "plant", "soil", "harvest", "कृषि", "खेती", "बाली"]
+    
+    # Check if the query contains any agriculture-related keywords
+    if any(keyword in query.lower() for keyword in agriculture_keywords):
+        chat_prompt = ChatPromptTemplate.from_template(
+            '''You are an AI assistant specialized in agriculture and farming topics. 
+            Provide a detailed and informative response to the following query about agriculture: {query}
+            
+            IMPORTANT: 
+            - Respond ONLY in Nepali language.
+            - Provide specific information related to the query.
+            - If the query is general, give an overview of the topic.
+            - Ensure your response is natural, conversational, and informative.'''
+        )
+    else:
+        chat_prompt = ChatPromptTemplate.from_template(
+            '''You are an AI assistant specialized in agriculture and plant-related topics. 
+            Analyze the following user input: {query}
+
+            If the input is a greeting:
+            Respond with a friendly greeting in Nepali and encourage the user to ask an agriculture-related question.
+
+            If the input is not related to agriculture or plants:
+            Politely explain in Nepali that you can only answer questions about agriculture and plants, 
+            and encourage the user to ask an agriculture-related question.
+
+            IMPORTANT: 
+            - Always respond ONLY in Nepali language.
+            - Ensure your response is natural and conversational.'''
+        )
     
     llm = ChatGoogleGenerativeAI(temperature=0.7, model="gemini-pro", google_api_key=api_key)
     chain = chat_prompt | llm
