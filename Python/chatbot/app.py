@@ -86,10 +86,9 @@ def is_greeting(query):
     return any(greeting in query.lower() for greeting in greetings)
 
 def get_agriculture_response(query):
-    # List of agriculture-related keywords
+ 
     agriculture_keywords = ["farm", "farming", "agriculture", "crop", "plant", "soil", "harvest", "कृषि", "खेती", "बाली"]
     
-    # Check if the query contains any agriculture-related keywords
     if any(keyword in query.lower() for keyword in agriculture_keywords):
         chat_prompt = ChatPromptTemplate.from_template(
             '''You are an AI assistant specialized in agriculture and farming topics. 
