@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import google.generativeai as gemini
-import random,os,markdown
+import os,markdown
 from dotenv import load_dotenv
 
 # Load the environment variables
@@ -25,7 +25,7 @@ class ChatRequest(BaseModel):
 
 # POST request for the chat API
 @app.post("/chat/")
-async def chat_api(request: ChatRequest):
+async def chat(request: ChatRequest):
     try:
         question = (request.question).strip()
         if not question:
