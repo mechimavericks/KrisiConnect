@@ -39,7 +39,7 @@
                 <a href="{{ route('marketplace.show', $product->id) }}"
                    class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     @if ($product->image)
-                        <img src="{{ asset('storage/app/public/public' . $product->image) }}" alt="{{ $product->name }}"
+                        <img src="{{asset('')}}" alt="{{ $product->name }}"
                              class="w-full h-40 object-cover">
                     @else
                         <div class="w-full h-40 bg-gray-200 flex items-center justify-center">

@@ -36,31 +36,39 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $product = new Product();
-        $product->name = $request->input('name');
-        $product->description = $request->input('description');
-        $product->price = $request->input('price');
-        $product->user_id = Auth::id();
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('public/products');
-            $product->image = str_replace('public/', '', $imagePath);
-        }
-
-        $product->save();
-
-        return redirect()->route('marketplace.index')->with('success', 'Product created successfully!');
-    }
-    
+   
+     public function store(Request $request)
+     {
+         $request->validate([
+             'name' => 'required|string|max:255',
+             'description' => 'nullable|string',
+             'price' => 'required|numeric', 
+     
+             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+         ]);
+     
+         $product = new Product();
+         $product->name = $request->input('name');
+         $product->description = $request->input('description');
+         $product->price  = $request->input('price');
+         $product->user_id  = Auth::id();
+         if($request->hasFile('image'))
+         {
+             $file = $request->file('image');
+             $path = public_path().'/uploads/gallery/gallery_file/';
+             $filename = date('ymdhis').$file->getClientOriginalName();
+             $file->move($path, $filename);
+             
+             
+            
+             $product->image= '/uploads/gallery/gallery_file/'.$filename;
+            
+         }
+     
+         $product->save();
+     
+         return redirect()->route('marketplace.index')->with('success', 'Product created successfully!');
+     }
 
     /**
      * Display the specified product.
