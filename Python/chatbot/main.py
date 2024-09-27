@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from langchain.prompts import ChatPromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os,markdown
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 # Load the environment variables
@@ -16,6 +17,16 @@ print(apikey)
 # Create a FastAPI instance
 app = FastAPI()
 
+
+# CROS Handeling 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Define the request model
 class ChatRequest(BaseModel):
