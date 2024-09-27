@@ -1,30 +1,15 @@
 from flask import Flask, render_template_string, request
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from langchain_google_genai import GoogleGenerativeAI
+from langchain.prompts import ChatPromptTemplate
+from langchain_google_genai import ChatGoogleGenerativeAI
 import os
+from dotenv import load_dotenv
+
+# Load the environment variables
+load_dotenv()
 
 app = Flask(__name__)
 
 api_key = os.getenv("GOOGLE_API_KEY")
-
-
-def is_agriculture_related(query):
-    agriculture_keywords = [
-        "plant", "crop", "farm", "agriculture", "soil", "harvest", "seed", "fertilizer", "pest", "disease",
-        "irrigation", "livestock", "horticulture", "organic", "greenhouse", "compost", "pruning", "grafting",
-        "plowing", "tilling", "sowing", "weeding", "mulching", "pollination", "germination", "hydroponics",
-        "agroforestry", "permaculture", "aquaculture", "silviculture", "apiculture", "viticulture",
-        "agronomy", "animal husbandry", "poultry", "dairy", "fodder", "pasture", "rotation", "sustainable",
-        "biotechnology", "genetic", "hybrid", "yield", "drought", "flood", "climate", "weather",
-        "pesticide", "herbicide", "fungicide", "insecticide", "organic", "inorganic", "manure",
-        "tractor", "plow", "cultivator", "sprayer", "harvester", "silo", "greenhouse",
-        "market", "price", "subsidy", "policy", "rural", "cooperative", "extension",
-        "कृषि", "खेती", "बाली", "मल", "बीउ", "माटो", "सिंचाई", "कीट", "रोग", "फसल",
-        "पशुपालन", "बागवानी", "जैविक", "कम्पोस्ट", "काँटछाँट", "कलमी", "जोताई", "रोपाई",
-        "गोडमेल", "परागसेचन", "अंकुरण", "जलकृषि", "मौरीपालन", "अन्नबाली", "फलफूल", "तरकारी"
-    ]
-    return any(keyword in query.lower() for keyword in agriculture_keywords)
 
 # HTML template
 html_template = """
@@ -96,6 +81,23 @@ html_template = """
 </html>
 """
 
+def is_greeting(query):
+    greetings = ["hello", "hi", "hey", "namaste", "नमस्ते", "हेलो", "हाइ"]
+    return any(greeting in query.lower() for greeting in greetings)
+
+def get_agriculture_response(query):
+    chat_prompt = ChatPromptTemplate.from_template(
+        '''You are an AI assistant specialized in agriculture and plant-related topics. 
+        Provide a helpful response to the following query: {query}
+        If the query is not related to agriculture or plants, politely explain that you can only answer questions about agriculture and plants.
+        IMPORTANT: Respond ONLY in Nepali language. Do not use any English.'''
+    )
+    
+    llm = ChatGoogleGenerativeAI(temperature=0.7, model="gemini-pro", google_api_key=api_key)
+    chain = chat_prompt | llm
+    response = chain.invoke({"query": query})
+    return response.content
+
 @app.route("/", methods=["GET", "POST"])
 def chat():
     query = None
@@ -103,19 +105,7 @@ def chat():
     
     if request.method == "POST":
         query = request.form.get("query")
-        if not is_agriculture_related(query):
-            response = "माफ गर्नुहोस्, म केवल कृषि र बोट-बिरुवा सम्बन्धी प्रश्नहरूको उत्तर दिन सक्छु।"
-        else:
-            chat_template = PromptTemplate(
-                input_variables=['query'],
-                template='''You are an AI assistant specialized in agriculture and plant-related topics. 
-                Provide a helpful response to the following query: {query}
-                IMPORTANT: Respond ONLY in Nepali language. Do not use any English.'''
-            )
-            
-            llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=api_key)
-            chat_chain = LLMChain(llm=llm, prompt=chat_template, verbose=True)
-            response = chat_chain.run(query=query)
+        response = get_agriculture_response(query)
     
     return render_template_string(html_template, query=query, response=response)
 
