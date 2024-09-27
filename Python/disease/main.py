@@ -1,16 +1,23 @@
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
 from ultralytics import YOLO
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_google_genai import GoogleGenerativeAI
-import os
+import os,markdown
+
+from dotenv import load_dotenv
+
+# Load the environment variables
+load_dotenv() 
+
+# API key for the Google API
+apikey = os.getenv("GOOGLE_API_KEY")
+print(apikey)
 
 app = FastAPI()
 
 model = YOLO("last.pt")
 
-api_key = os.getenv("GOOGLE_API_KEY")
 
 UPLOAD_FOLDER = 'static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -32,12 +39,12 @@ def generate_summary(disease):
         6. थप सुझावहरू (Additional Recommendations)
         '''
     )
-    llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=api_key)
+    llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=apikey)
     summary_chain = LLMChain(llm=llm, prompt=summary_template, verbose=True)
     summary = summary_chain.run(disease=disease)
     return summary
 
-@app.post("/predict")
+@app.post("/predict/")
 async def predict_disease(file: UploadFile = File(...)):
     if file:
         filepath = os.path.join(UPLOAD_FOLDER, file.filename)
@@ -56,13 +63,13 @@ async def predict_disease(file: UploadFile = File(...)):
             disease = class_names[class_id]
             summary = generate_summary(disease)
             formatted_predictions.append({
+                'status' : 200,
                 'class': disease,
                 'summary': summary,
                 'confidence': confidence
             })
         
-        return JSONResponse(content={"predictions": formatted_predictions})
+        return {"predictions": formatted_predictions}
 
-    return JSONResponse(content={"error": "No file uploaded"}, status_code=400)
+    return {"error": "No file uploaded"}
 
-# Run the app with: `uvicorn your_script_name:app --reload`
