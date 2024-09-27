@@ -16,7 +16,7 @@ print(apikey)
 
 app = FastAPI()
 
-model = YOLO("last.pt")
+model = YOLO("disease.pt")
 
 
 UPLOAD_FOLDER = 'static/uploads'
@@ -42,7 +42,7 @@ def generate_summary(disease):
     llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=apikey)
     summary_chain = LLMChain(llm=llm, prompt=summary_template, verbose=True)
     summary = summary_chain.run(disease=disease)
-    return summary
+    return markdown.markdown(summary)
 
 @app.post("/predict/")
 async def predict_disease(file: UploadFile = File(...)):
@@ -68,8 +68,16 @@ async def predict_disease(file: UploadFile = File(...)):
                 'summary': summary,
                 'confidence': confidence
             })
-        
-        return {"predictions": formatted_predictions}
 
-    return {"error": "No file uploaded"}
+        if len(formatted_predictions) == 0:
+            return {
+                "status": 200,
+                "error": "No disease detected"
+            }
+        return formatted_predictions
+
+    return {
+        "status": 400,
+        "error": "No file uploaded"
+        }
 
