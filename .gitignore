@@ -4,3 +4,6 @@
 /apikey.txt
 /Python/chatbot/temp.py
 /Python/.env
+/python/chatbot/__pycache__
+/python/disease/__pycache__
+/.venv
