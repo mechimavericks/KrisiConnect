@@ -10,7 +10,20 @@ api_key = os.getenv("GOOGLE_API_KEY")
 
 
 def is_agriculture_related(query):
-    agriculture_keywords = ["plant", "crop", "farm", "agriculture", "soil", "harvest", "seed", "fertilizer", "pest", "disease"]
+    agriculture_keywords = [
+        "plant", "crop", "farm", "agriculture", "soil", "harvest", "seed", "fertilizer", "pest", "disease",
+        "irrigation", "livestock", "horticulture", "organic", "greenhouse", "compost", "pruning", "grafting",
+        "plowing", "tilling", "sowing", "weeding", "mulching", "pollination", "germination", "hydroponics",
+        "agroforestry", "permaculture", "aquaculture", "silviculture", "apiculture", "viticulture",
+        "agronomy", "animal husbandry", "poultry", "dairy", "fodder", "pasture", "rotation", "sustainable",
+        "biotechnology", "genetic", "hybrid", "yield", "drought", "flood", "climate", "weather",
+        "pesticide", "herbicide", "fungicide", "insecticide", "organic", "inorganic", "manure",
+        "tractor", "plow", "cultivator", "sprayer", "harvester", "silo", "greenhouse",
+        "market", "price", "subsidy", "policy", "rural", "cooperative", "extension",
+        "कृषि", "खेती", "बाली", "मल", "बीउ", "माटो", "सिंचाई", "कीट", "रोग", "फसल",
+        "पशुपालन", "बागवानी", "जैविक", "कम्पोस्ट", "काँटछाँट", "कलमी", "जोताई", "रोपाई",
+        "गोडमेल", "परागसेचन", "अंकुरण", "जलकृषि", "मौरीपालन", "अन्नबाली", "फलफूल", "तरकारी"
+    ]
     return any(keyword in query.lower() for keyword in agriculture_keywords)
 
 # HTML template
