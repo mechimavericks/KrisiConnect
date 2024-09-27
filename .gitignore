@@ -9,3 +9,4 @@
 /.venv
 /python/disease/runs
 .env
+/python/disease/static/uploads
