@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\ProductController;
 
 
@@ -28,6 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/user/update-phone', [UserController::class, 'updatePhone'])->name('user.updatePhone');
+
 
     Route::get('/marketplace', [ProductController::class, 'index'])->name('marketplace.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('marketplace.create');
