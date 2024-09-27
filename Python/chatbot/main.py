@@ -1,9 +1,11 @@
+# Importing the Necessary Libraries
 from fastapi import FastAPI
 from pydantic import BaseModel
 import google.generativeai as gemini
 import random,os,markdown
 from dotenv import load_dotenv
 
+# Load the environment variables
 load_dotenv() 
 
 # API key for the Google API
@@ -25,18 +27,31 @@ class ChatRequest(BaseModel):
 @app.post("/chat/")
 async def chat_api(request: ChatRequest):
     try:
-        question = request.question
-        # Defining the template for the AI model
-        template=f"You are an AI assistant specialized in agriculture. ONLY answer the following question if it is related to agriculture, farming, crops, livestock, or other agricultural topics. If the question is not related to agriculture, respond with 'Sorry'. Question: {question} Answer:'' "
+        question = (request.question).strip()
+        if not question:
+            # Prepare the error response data
+            data = {
+                "status": 400 , 
+                "error": "Bad Request! Please provide a valid question!"
+            }
+            return {"response": data}
 
+        # Defining the template for the AI model
+        template = (
+            f"You are an AI assistant specialized in agriculture. "
+            f"Provide a detailed response only if the following question is related to agriculture, farming, crops, livestock, or other agricultural topics. "
+            f"Ignore the question if it is not related to these topics. "
+            f"Question: {question} Answer: ''"
+        )
+
+
+        # Generate the response from the AI model
         response = model.generate_content(template)
 
-        sorryresponse=["I can only answer questions related to agriculture.","Sorry, I am only able to answer questions related to agriculture.","I can only answer questions related to agriculture, farming, crops, livestock, or other agricultural topics.","Sorry, I am only trained to answer questions related to agriculture related Questions."]
-
-        if response.text=="Sorry. \n":
-            responsetext=sorryresponse[random.randint(0,3)]
-        else:
-            responsetext=markdown.markdown(response.text)
+        # Convert the response to markdown
+        responsetext=markdown.markdown(response.text)
+        
+        # Prepare the response data
         data = {
             "status": 200 ,
             "question": question,
@@ -45,9 +60,11 @@ async def chat_api(request: ChatRequest):
 
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+        # Prepare the error response data
         data = {
             "status": 500 , 
             "error": "Sorry! Something went wrong!"
         }
     
+    # Return the response data
     return {"response": data}
