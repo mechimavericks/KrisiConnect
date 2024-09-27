@@ -1,44 +1,45 @@
 # Importing the Necessary Libraries
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from ultralytics import YOLO
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_google_genai import GoogleGenerativeAI
-import os,markdown
+from fastapi.responses import JSONResponse
+import os, markdown
 from dotenv import load_dotenv
 
 # Load the environment variables
-load_dotenv() 
+load_dotenv()
 
 # API key for the Google API
 apikey = os.getenv("API_KEY")
-print(apikey)
+
+app = FastAPI()
 
 
-app= FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Load the YOLO model
-model = YOLO("disease/disease.pt")
+model = YOLO("disease.pt")
 UPLOAD_FOLDER = 'static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-
-
-
-# Define the request model
+# Define the request model for chat
 class ChatRequest(BaseModel):
     question: str
 
-
-
-# CHATBOT API Code Section Starts Here
-def is_greeting(query):
-    greetings = ["hello", "hi", "hey", "namaste", "नमस्ते", "हेलो", "हाइ"]
-    return any(greeting in query.lower() for greeting in greetings)
-
-def get_agriculture_response(query):
+# CHATBOT API Code Section
+def get_agriculture_response(query: str):
     agriculture_keywords = ["farm", "farming", "agriculture", "crop", "plant", "soil", "harvest", "कृषि", "खेती", "बाली"]
     
     if any(keyword in query.lower() for keyword in agriculture_keywords):
@@ -74,48 +75,28 @@ def get_agriculture_response(query):
     response = chain.invoke({"query": query})
     return response
 
-# POST request for the chat API
 @app.post("/chat/")
 async def chat(request: ChatRequest):
     try:
-        question = (request.question).strip()
+        question = request.question.strip()
         if not question:
-            # Prepare the error response data
-            data = {
-                "status": 400 , 
-                "error": "Bad Request! Please provide a valid question!"
-            }
-            return {"response": data}
+            return JSONResponse(status_code=400, content={"error": "Bad Request! Please provide a valid question!"})
 
-        # Defining the template for the AI model
         response = get_agriculture_response(question)
+        response_text = markdown.markdown(response)
 
-        # Convert the response to markdown
-        responsetext=markdown.markdown(response)
-        
-        # Prepare the response data
-        data = {
-            "status": 200 ,
+        return JSONResponse(status_code=200, content={
             "question": question,
-            "response": responsetext
-        }
+            "response": response_text
+        })
 
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        # Prepare the error response data
-        data = {
-            "status": 500 , 
-            "error": "Sorry! Something went wrong!"
-        }
-    
-    # Return the response data
-    return {"response": data}
+        return JSONResponse(status_code=500, content={
+            "error": f"Sorry! Something went wrong: {str(e)}"
+        })
 
-
-
-
-# DISEASE DETECTION API Code Section Starts Here
-def generate_summary(disease):
+# DISEASE DETECTION API Code Section
+def generate_summary(disease: str):
     summary_template = PromptTemplate(
         input_variables=['disease'],
         template='''Generate a summary of cures and precautions for the plant disease: {disease}. 
@@ -136,19 +117,24 @@ def generate_summary(disease):
     summary = summary_chain.run(disease=disease)
     return markdown.markdown(summary)
 
-# POST request for the disease prediction API
 @app.post("/predict/")
 async def predict_disease(file: UploadFile = File(...)):
-    if file:
+    try:
+        if not file:
+            return JSONResponse(status_code=400, content={"error": "No file uploaded"})
+
+        # Save the uploaded file
         filepath = os.path.join(UPLOAD_FOLDER, file.filename)
         with open(filepath, "wb") as f:
             f.write(await file.read())
-        
+
+        # Run YOLO model prediction
         results = model(source=filepath, save=True)
-        
+
         predictions = results[0].boxes.data.tolist()
         class_names = results[0].names
-        
+
+        # Format the predictions
         formatted_predictions = []
         for pred in predictions:
             class_id = int(pred[5])
@@ -156,21 +142,18 @@ async def predict_disease(file: UploadFile = File(...)):
             disease = class_names[class_id]
             summary = generate_summary(disease)
             formatted_predictions.append({
-                'status' : 200,
                 'class': disease,
                 'summary': summary,
                 'confidence': confidence
             })
 
+        # If no predictions
         if len(formatted_predictions) == 0:
-            return {
-                "status": 200,
-                "error": "No disease detected"
-            }
-        return formatted_predictions
+            return JSONResponse(status_code=200, content={ "message": "No disease detected"})
 
-    return {
-        "status": 400,
-        "error": "No file uploaded"
-        }
+        return JSONResponse(status_code=200, content=formatted_predictions)
 
+    except Exception as e:
+        return JSONResponse(status_code=500, content={
+            "error": f"Sorry! Something went wrong: {str(e)}"
+        })
