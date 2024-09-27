@@ -9,7 +9,17 @@
 </head>
 <body class="bg-[#0d1727] text-white font-sans">
 
+<div class="max-w-lg mx-auto p-5">
+    <header class="flex justify-between items-center mb-5">
+        <h1 class="text-xl font-bold">कृषि कनेक्ट</h1>
+    </header>
+    
+   
 
+    
+
+    @include('footer')
+</div>
 
  
 
