@@ -56,7 +56,7 @@ class ProductController extends Controller
          {
              $file = $request->file('image');
              $path = public_path().'/uploads/gallery/gallery_file/';
-             $filename = time().$file->getClientOriginalExtension();
+             $filename = time().'.'.$file->getClientOriginalExtension();
              $file->move($path, $filename);
              
              

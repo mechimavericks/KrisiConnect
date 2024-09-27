@@ -44,8 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/products', [ProductController::class, 'store'])->name('marketplace.store');
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('marketplace.show');
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('marketplace.edit');
-    Route::put('/products/{product}', [ProductController::class, 'update'])->name('marketplace.update');
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('marketplace.destroy');
+    // Route::put('/products/{product}', [ProductController::class, 'update'])->name('marketplace.update');
+    // Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('marketplace.destroy');
 
 
 
