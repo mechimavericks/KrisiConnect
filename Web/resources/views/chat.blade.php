@@ -9,24 +9,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <style>
-        .user-message {
-            background-color: #1a2749;
-            align-self: flex-end;
-            margin: 5px 0;
-            border-radius: 15px 15px 0 15px;
-            padding: 10px;
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .user-message, .bot-message {
             max-width: 75%;
             word-wrap: break-word;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 15px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background-color: #3b82f6;
+            color: white;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
         }
 
         .bot-message {
-            background-color: #ffffff33;
+            background-color: #1a2749;
+            color: white;
             align-self: flex-start;
-            margin: 5px 0;
             border-radius: 15px 15px 15px 0;
-            padding: 10px;
-            max-width: 75%;
-            word-wrap: break-word;
         }
 
         .chatbox {
@@ -47,6 +55,8 @@
             right: 0;
             max-width: 600px;
             margin: 0 auto;
+            background-color: #0d1727;
+            padding: 10px 0;
         }
 
         .placeholder-message {
@@ -56,18 +66,96 @@
             height: 100%;
             text-align: center;
             padding: 20px;
-            color: #3b82f6; /* Match theme color */
-            background: rgba(255, 255, 255, 0.1); /* Light background for contrast */
-            border-radius: 12px; /* Rounded corners */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+            color: #3b82f6;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             transition: opacity 0.5s;
             opacity: 1;
         }
 
         .heading {
             font-size: 1.5rem;
-            font-weight: 700; /* Bold font */
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            font-weight: 700;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Spinner CSS */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Spinner container */
+        .spinner-container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            margin: 10px 0;
+            height: 24px;
+        }
+
+        /* Enhancements for chat layout */
+        .chat-wrapper {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .chat-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .input-container {
+            flex-grow: 1;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #1a2749;
+            color: white;
+            border: none;
+            outline: none;
+        }
+
+        .send-btn {
+            color: #3b82f6;
+            font-size: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -82,8 +170,10 @@
     <div class="chat-form-container max-w-sm">
         <form id="chatForm" class="flex items-center w-full pb-4">
             <a href="/scan" class='text-3xl p-2'><i class='bx bx-scan'></i></a>
-            <input type="text" id="message" autocomplete="off" class="flex-1 p-3 rounded-lg bg-[#1a2749] text-white border-none outline-none" placeholder="Type your message..." required>
-            <button type="submit" class="md:ml-2 text-[#3b82f6] text-2xl hover:bg-[#2563eb] text-white p-2 rounded-lg"><i class='bx bxs-send'></i></button>
+            <div class="input-container">
+                <input type="text" id="message" autocomplete="off" placeholder="Type your message..." required>
+                <button type="submit" class="send-btn"><i class='bx bxs-send'></i></button>
+            </div>
         </form>
     </div>
     
@@ -96,20 +186,39 @@
         const chatbox = document.getElementById('chatbox');
         const placeholder = document.getElementById('placeholder');
 
+        let spinner; // Define spinner element
+
         // Function to display messages
         function displayMessage(message, isUser = true) {
             const messageDiv = document.createElement('div');
             messageDiv.className = isUser ? 'user-message' : 'bot-message';
-            messageDiv.innerHTML = message; // Use innerHTML to display HTML content
+            messageDiv.innerHTML = message;
             chatbox.appendChild(messageDiv);
-            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+            chatbox.scrollTop = chatbox.scrollHeight;
 
             // Hide placeholder if there's at least one message
             if (chatbox.children.length > 1) {
                 placeholder.style.opacity = '0'; // Fade out effect
                 setTimeout(() => {
-                    placeholder.style.display = 'none'; // Remove from DOM after fade out
-                }, 500); // Match timeout with opacity transition duration
+                    placeholder.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        // Function to display the preloader spinner
+        function showSpinner() {
+            spinner = document.createElement('div');
+            spinner.className = 'spinner-container';
+            spinner.innerHTML = '<div class="spinner"></div>';
+            chatbox.appendChild(spinner);
+            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+        }
+
+        // Function to remove the preloader spinner
+        function hideSpinner() {
+            if (spinner) {
+                chatbox.removeChild(spinner);
+                spinner = null;
             }
         }
 
@@ -124,6 +233,9 @@
             // Display user message in the chatbox
             displayMessage(message, true);
 
+            // Show spinner while waiting for the bot's response
+            showSpinner();
+
             // Make API request to FastAPI backend
             try {
                 const response = await fetch('http://127.0.0.1:8001/chat/', {
@@ -137,7 +249,8 @@
                 if (response.ok) {
                     const data = await response.json();
 
-                    console.log(data.response)
+                    // Hide spinner before showing bot response
+                    hideSpinner();
 
                     // Display bot's response in the chatbox
                     displayMessage(data.response, false);
@@ -145,6 +258,7 @@
                     console.error('Error in fetching response:', response.statusText);
                 }
             } catch (error) {
+                hideSpinner(); // Ensure spinner is hidden on error
                 console.error('Error:', error);
             }
         });
