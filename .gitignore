@@ -8,6 +8,8 @@
 /python/disease/__pycache__
 /.venv
 /python/disease/runs
+.env
+/python/disease/static/uploads
 
 
 

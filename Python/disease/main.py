@@ -27,12 +27,10 @@ def generate_summary(disease):
         Your response should follow this structure in Nepali:
         1. रोगको नाम (Disease Name)
         2. रोगको कारण (Cause of the Disease)
-        3. उपचार विधिहरू (Treatment Methods)
-        4. रोकथामका उपायहरू (Preventive Measures)
-        5. रोगको छान्ने उपाय (Curing the disease)
-        6. रोगको रोकथाम (Preventing the disease)
-        7. रोगको उपचार विधिहरू (Treatment Methods)
-        8. रोगको रोकथाम (Preventing the disease)
+        3. रोगको लक्षणहरू (Symptoms of the Disease)
+        4. उपचार विधिहरू (Treatment Methods)
+        5. रोकथामका उपायहरू (Preventive Measures)
+        6. थप सुझावहरू (Additional Recommendations)
         '''
     )
     llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=api_key)
