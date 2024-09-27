@@ -2,5 +2,5 @@
     <div class="text-3xl"><a href="/"><i class="bx bx-home"></i></a></div>
     <div class="text-3xl"><a href="/scan"><i class="bx bx-scan"></i></a></div>
     <div class="text-3xl"><a href="/marketplace"><i class="bx bx-store-alt"></i></a></div>
-    <div class="text-3xl"><a href="http://localhost:8000/chat"><i class="bx bxs-bot"></i></a></div>
+    <div class="text-3xl"><a href="/chat"><i class="bx bxs-bot"></i></a></div>
 </footer>
