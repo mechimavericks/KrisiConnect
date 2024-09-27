@@ -11,6 +11,8 @@ app = Flask(__name__)
 
 model = YOLO("last.pt")
 
+api_key = os.getenv("GOOGLE_API_KEY")
+
 UPLOAD_FOLDER = 'static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -32,7 +34,7 @@ def generate_summary(disease):
         7. रोगको उपचार विधिहरू (Treatment Methods)
         '''
     )
-    llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro")
+    llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=api_key)
     summary_chain = LLMChain(llm=llm, prompt=summary_template, verbose=True)
     summary = summary_chain.run(disease=disease)
     return summary
