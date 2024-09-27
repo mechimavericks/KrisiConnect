@@ -10,3 +10,14 @@
 /python/disease/runs
 .env
 /python/disease/static/uploads
+
+
+
+
+/IOT/venv
+/IOT/__pycache__
+/IOT/.env
+/IOT/temp.py
+
+/IOT
+.env

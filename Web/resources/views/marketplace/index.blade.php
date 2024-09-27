@@ -40,8 +40,7 @@
                 <a href="{{ route('marketplace.show', $product->id) }}"
                    class="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     @if ($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
-                             class="w-full h-40 object-cover">
+                    <img src="{{ asset('storage/products/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-40 object-cover">
                     @else
                         <div class="w-full h-40 bg-gray-200 flex items-center justify-center">
                             <span class="text-gray-500">तस्बिर उपलब्ध छैन</span>
@@ -49,7 +48,7 @@
                     @endif
                     <div class="p-4">
                         <h2 class="text-xl font-semibold text-gray-800">{{ $product->name }}</h2>
-                        <p class="text-lg font-semibold text-gray-900 mb-2">मूल्य: ${{ $product->price }}</p>
+                        <p class="text-lg font-semibold text-gray-900 mb-2">मूल्य: रु{{ $product->price }}</p>
                         <p class="text-sm text-gray-500 mb-4">
                             विक्रेता: {{ $product->user->name }}
                         </p>
