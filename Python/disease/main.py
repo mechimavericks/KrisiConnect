@@ -1,8 +1,7 @@
 from ultralytics import YOLO
 
-model = YOLO("best.pt")
+model = YOLO("last.pt")
 
-model.eval()
+test_img = "image.png"
 
-model.predict("test.jpg", save=True)
-
+results = model(source=test_img, show=True, save=True)
