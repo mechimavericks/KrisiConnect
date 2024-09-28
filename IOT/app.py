@@ -8,18 +8,15 @@ app = FastAPI()
 async def receive_data(request: Request):
     data = await request.json()
     
-    # Save the received data to a JSON file
     with open('IOT/response.json', 'w') as f:
         json.dump(data, f)
     
-    # Get moisture and pH levels
     moisture_level = data.get('moistureLevel', 0)
     ph_level = data.get('pHLevel', 0)
     
-    # Get crop recommendation
     recommendation = recommend_crop(moisture_level, ph_level)
     
-    print(f"Recommended crop: {recommendation}")  # Print the recommendation
+    print(f"Recommended crop: {recommendation}") 
     
     return JSONResponse({
         "message": "Data received successfully", 
@@ -31,11 +28,9 @@ async def receive_data(request: Request):
 @app.get('/recommendation')
 async def get_recommendation():
     try:
-        # Read the data from response.json
         with open('IOT/response.json', 'r') as f:
             data = json.load(f)
         
-        # Get moisture and pH levels
         moisture_level = data.get('moistureLevel', 0)
         ph_level = data.get('pHLevel', 0)
         
