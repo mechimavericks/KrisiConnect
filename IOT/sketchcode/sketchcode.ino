@@ -1,31 +1,29 @@
 // Define pin numbers
 const int moistureSensorPin = A0; // Moisture sensor connected to A0
-const int phSensorPin = A1;        // pH sensor connected to A1
+const int phSensorPin = A1;       // pH sensor connected to A1
 
 void setup() {
     Serial.begin(9600); // Initialize Serial communication at 9600 bps
 }
 
 void loop() {
-    // Read the moisture level from the moisture sensor
+    // Read sensor values
     int moistureValue = analogRead(moistureSensorPin);
-    // Read the pH level from the pH sensor
     int phValue = analogRead(phSensorPin);
 
-    // Convert the moisture reading to a percentage (0-100)
+    // Convert moisture reading (0-1023) to percentage (0-100)
     float moisturePercentage = map(moistureValue, 0, 1023, 0, 100);
+
+    // Convert pH sensor value (0-1023) to a pH scale (0-14)
+    float voltage = phValue * (5.0 / 1023.0); // Convert to voltage (0-5V)
+    float phLevel = map(voltage, 0.0, 5.0, 0.0, 14.0); // Map voltage to pH scale (0-14)
     
-    // Convert the pH reading to a scale of 0-14
-    // Assuming the pH sensor outputs a range corresponding to the pH scale (0-14)
-    float phLevel = (phValue / 1023.0) * 14.0;
+    // Send formatted data to Serial Monitor in JSON structure
+    Serial.print(F("{\"moistureLevel\": "));
+    Serial.print(moisturePercentage, 2);  // Print with 2 decimal precision
+    Serial.print(F(", \"phLevel\": "));
+    Serial.print(phLevel, 2);              // Print with 2 decimal precision
+    Serial.println(F("}"));
 
-    // Print formatted data in JSON-like structure to Serial Monitor
-    Serial.print("{\"moistureLevel\": ");
-    Serial.print(moisturePercentage);
-    Serial.print(", \"pHLevel\": ");
-    Serial.print(phLevel);
-    Serial.println("}");
-
-    // Delay before the next reading
-    delay(2000); // Wait for 2 seconds before taking the next reading
+    delay(2000); // Delay 2 seconds before next reading
 }
