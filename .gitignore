@@ -23,6 +23,7 @@
 # /IOT
 /IOT/__pycache__
 /IOT/venv
+/IOT/sketchcode
 /IOT/Ultrasonic.py
 # .env
 

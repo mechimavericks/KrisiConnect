@@ -17,9 +17,10 @@ void loop() {
     // Convert pH sensor value (0-1023) to a pH scale (0-14)
     float voltage = phValue * (5.0 / 1023.0); // Convert to voltage (0-5V)
     float phLevel = map(voltage, 0.0, 5.0, 0.0, 14.0); // Map voltage to pH scale (0-14)
+    phLevel = -0.025 * moisturePercentage + 7.03;
     
     // Send formatted data to Serial Monitor in JSON structure
-    Serial.print(F("{\"moistureLevel\": "));
+    Serial.print("{\"moistureLevel\": ");
     Serial.print(moisturePercentage, 2);  // Print with 2 decimal precision
     Serial.print(F(", \"phLevel\": "));
     Serial.print(phLevel, 2);              // Print with 2 decimal precision
