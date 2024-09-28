@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import serial,json
+# import serial,json
 
 app = FastAPI()
 
@@ -13,9 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-SERIAL_PORT = '/dev/ttyUSB0'  # Change this to your Arduino's COM port
-BAUD_RATE = 9600
-arduino = serial.Serial(SERIAL_PORT, BAUD_RATE)
+# SERIAL_PORT = '/dev/ttyUSB0'  # Change this to your Arduino's COM port
+# BAUD_RATE = 9600
+# arduino = serial.Serial(SERIAL_PORT, BAUD_RATE)
 
 @app.get("/sensordata")
 async def getsensordata():
