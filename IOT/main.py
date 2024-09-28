@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-# import serial,json
+import serial
+import json
 
 app = FastAPI()
 
@@ -13,40 +14,53 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# SERIAL_PORT = '/dev/ttyUSB0'  # Change this to your Arduino's COM port
-# BAUD_RATE = 9600
-# arduino = serial.Serial(SERIAL_PORT, BAUD_RATE)
+SERIAL_PORT = '/dev/ttyUSB0'  # Change this to your Arduino's COM port
+BAUD_RATE = 9600
+arduino = serial.Serial(SERIAL_PORT, BAUD_RATE)
 
 @app.get("/sensordata")
 async def getsensordata():
-    return JSONResponse(
-        status_code=200,
-        content={
-            "moistureLevel": 33.00, 
-            "phLevel": 6.21,
-            "crops" : "Tomato"
-        }
-    )
+    try:
+        if arduino.in_waiting > 0:
+            line = arduino.readline().decode('utf-8').rstrip()
+            sensordata = json.loads(line)
 
-    # try:
-    #     if arduino.in_waiting > 0:
-    #         line = arduino.readline().decode('utf-8').rstrip()  
+            # Extract moisture and pH values
+            moisture = sensordata['moistureLevel']
+            ph = sensordata['phLevel']
 
-    #         return JSONResponse(
-    #             status_code=200,
-    #             content=line
-    #         )
-    #     else:
-    #         return JSONResponse(
-    #             status_code=204,
-    #             content={
-    #                 "message": "No sensor data available"
-    #             }
-    #         )
-    # except Exception as e:
-    #     return JSONResponse(
-    #         status_code=500,
-    #         content={
-    #             "error": f"Internal Server Error: {str(e)}"
-    #         }
-    #     )
+            # Initialize the crop variable
+            crop = "No specific recommendation. Consider soil amendments or choosing a different crop."
+
+            # Crop recommendation logic
+            if 30 <= moisture <= 40 and 5.5 <= ph <= 6.5:
+                crop = "Paddy (Rice)"
+            elif 20 <= moisture <= 30 and 6.0 <= ph <= 7.0:
+                crop = "Wheat"
+            elif 20 <= moisture <= 30 and 5.5 <= ph <= 7.0:
+                crop = "Maize"
+
+            # Create a response
+            response_content = {
+                "sensorData": {
+                    "moistureLevel": moisture,
+                    "phLevel": ph
+                },
+                "recommendedCrop": crop
+            }
+            return JSONResponse(status_code=200, content=response_content)
+
+        else:
+            return JSONResponse(
+                status_code=204,
+                content={
+                    "message": "No sensor data available"
+                }
+            )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": f"Internal Server Error: {str(e)}"
+            }
+        )
