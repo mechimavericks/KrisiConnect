@@ -10,14 +10,14 @@
     <link rel="apple-touch-icon" href="{{ asset('ICON.PNG') }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
 </head>
-<body class="bg-[#0d1727] text-white font-sans flex items-center justify-center min-h-screen">
-<div class="max-w-sm mx-auto p-5">
+<body class="bg-[#0d1727] text-white font-sans flex items-center justify-center min-h-screen overflow-x-hidden">
+<div class="max-w-sm w-full mx-auto p-4">
     <header class="mb-6 text-center">
         <h1 class="text-2xl font-bold mb-4">बिरुवा स्क्यान गर्नुहोस्</h1>
     </header>
 
     <div class="flex flex-col items-center justify-center mb-6">
-        <video id="video" class="rounded-lg shadow-lg mb-4 w-full" autoplay></video>
+        <video id="video" class="rounded-lg shadow-lg mb-4 w-full h-auto" autoplay></video>
         <canvas id="canvas" class="hidden"></canvas>
         <img id="capturedImage" class="w-full h-auto rounded-lg border-amber-50 border-4 shadow-lg hidden mb-6" alt="Scanned Plant">
     </div>
@@ -29,9 +29,9 @@
             <button id="viewResultButton" class="px-6 py-3 bg-green-600 rounded-full">नतिजा हेर्नुहोस्</button>
         </div>
 
-        <div id="results" class="mt-4 text-left bg-gray-800 p-4 rounded-lg shadow-lg hidden overflow-auto" >
+        <div id="results" class="mt-4 text-left bg-gray-800 p-4 rounded-lg shadow-lg hidden overflow-x-auto">
             <h3 class="text-lg font-semibold mb-2">Disease Summary</h3>
-            <pre id="diseaseSummary"></pre>
+            <pre id="diseaseSummary" class="whitespace-pre-wrap"></pre>
         </div>
 
         <div id="loadingSpinner" class="hidden mt-4">
@@ -142,12 +142,9 @@
                     const confidence = (prediction.confidence * 100).toFixed(2); // Convert to percentage
 
                     // Display the disease class and confidence level
-                    diseaseSummary.innerHTML = `<div class='relative w-11/12'>
-
+                    diseaseSummary.innerHTML = `
                         <h3 class="text-lg font-semibold mb-2">${prediction.class} (Confidence: ${confidence}%)</h3>
                         <div>${prediction.summary}</div>
-
-                        </div>
                     `;
 
                     document.getElementById('results').classList.remove('hidden');

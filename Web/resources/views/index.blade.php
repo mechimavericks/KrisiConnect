@@ -6,6 +6,11 @@
     <title>Krishi Connect - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!-- PWA  -->
+<meta name="theme-color" content="#6777ef"/>
+<link rel="apple-touch-icon" href="{{ asset('log.png') }}">
+<link rel="manifest" href="{{ asset('/manifest.json') }}">
 </head>
 <body class="bg-[#0d1727] text-white font-sans">
 <div class="max-w-sm mx-auto p-5">
@@ -65,7 +70,7 @@
 @include('footer')
 </div>
 
-<script src="”http://localhost:8000/sw.js”">
+<script src="{{asset('sw.js')}}">
 
 </script>
 

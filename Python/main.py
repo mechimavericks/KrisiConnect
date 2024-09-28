@@ -112,7 +112,7 @@ def generate_summary(disease: str):
         6. थप सुझावहरू (Additional Recommendations)
         '''
     )
-    llm = GoogleGenerativeAI(temperature=0.7, model="gemini-pro", api_key=apikey)
+    llm = GoogleGenerativeAI(temperature=0.7, model="gemini-1.5-flash", api_key=apikey)
     summary_chain = LLMChain(llm=llm, prompt=summary_template, verbose=True)
     summary = summary_chain.run(disease=disease)
     return markdown.markdown(summary)
@@ -129,7 +129,7 @@ async def predict_disease(file: UploadFile = File(...)):
             f.write(await file.read())
 
         # Run YOLO model prediction
-        results = model(source=filepath, save=True)
+        results = model(source=filepath, save=True, conf=0.4)
 
         predictions = results[0].boxes.data.tolist()
         class_names = results[0].names
