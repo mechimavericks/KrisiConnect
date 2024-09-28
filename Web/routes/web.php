@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/scan',[\App\Http\Controllers\MainController::class,'scan_index']);
+    Route::get('/iot',[\App\Http\Controllers\MainController::class,'iot_index']);
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 
     Route::post('/api/chat/send', [ChatController::class, 'sendMessage']);

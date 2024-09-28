@@ -10,4 +10,8 @@ class MainController extends Controller
     {
         return view('scan');
     }
+    public function iot_index()
+    {
+        return view('iot');
+    }
 }
