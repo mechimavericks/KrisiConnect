@@ -50,10 +50,10 @@ The platform also offers a community space for knowledge sharing, resources on t
 
 - **Python** is utilized to create the APIs that interact with the frontend and manage data flow between different components. Additionally, Python powers the machine learning models integrated into the platform, enabling real-time analysis and smart farming insights.
 
-## 3. YOLOv8 for Model Training
+## 3. Ultralytics for Model Training
 
-- **YOLOv8 (You Only Look Once)** is used for training machine learning models, specifically for object detection and analysis. The training takes place on **Google Colab**, leveraging cloud GPU resources for efficient model training.
-
+- **Ultralytics (YOLOv8)** is used for training machine learning models, specifically for object detection. It have set the benchmark for object detection in the coco dataset. It is used to train the model for detecting diseases in the crops. The training takes place on **Google Colab**, leveraging cloud GPU resources for efficient model training.
+ 
 ## 4. LangChain for Intelligent Conversations
 
 - **LangChain** is incorporated to handle natural language processing (NLP) tasks and conversational AI. It enables smart interactions between users and the platform, providing personalized recommendations and responses.
