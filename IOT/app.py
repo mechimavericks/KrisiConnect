@@ -33,8 +33,7 @@ async def get_recommendation():
         
         moisture_level = data.get('moistureLevel', 0)
         ph_level = data.get('pHLevel', 0)
-        
-        # Get crop recommendation
+
         recommendation = recommend_crop(moisture_level, ph_level)
         
         print(f"Recommended crop: {recommendation}")  # Print the recommendation
@@ -61,5 +60,3 @@ def recommend_crop(moisture, ph):
     
     print(f"Recommended crop based on moisture {moisture} and pH {ph}: {crop}")
     return crop
-
-# Remove the shutdown event as it's no longer needed without the serial connection
