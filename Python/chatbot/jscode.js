@@ -12,7 +12,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-fetch("http://127.0.0.1:8000/chat/", requestOptions)
+fetch("http://127.0.0.1/chat/", requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.error(error));
