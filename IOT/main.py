@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-SERIAL_PORT = '/dev/ttyUSB0'  # Change this to your Arduino's COM port
+SERIAL_PORT = '/dev/ttyUSB1'  # Change this to your Arduino's COM port
 BAUD_RATE = 9600
 arduino = serial.Serial(SERIAL_PORT, BAUD_RATE)
 

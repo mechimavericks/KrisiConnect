@@ -83,9 +83,9 @@
             console.log('Moisture Data:', data);
 
             // Display the readable API response
-            moistureLevel.textContent = `${data.moistureLevel}%`;
-            phLevel.textContent = `${data.phLevel}`;
-            crops.textContent = data.crops;
+            moistureLevel.textContent = `${data.sensorData.moistureLevel}%`;
+            phLevel.textContent = `${data.sensorData.phLevel}`;
+            crops.textContent = data.recommendedCrop;
 
             // Provide advice based on moisture level
             moistureAdvice.innerHTML = getMoistureAdvice(data.moistureLevel);
