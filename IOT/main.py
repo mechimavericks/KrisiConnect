@@ -1,24 +1,52 @@
 from fastapi import FastAPI
-import serial
-import time
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+# import serial,json
 
 app = FastAPI()
 
-# Adjust the port and baudrate as needed
-SERIAL_PORT = '/dev/ttyUSB0'  # Change this to your Arduino's COM port
-BAUD_RATE = 9600
-arduino = serial.Serial(SERIAL_PORT, BAUD_RATE)
-time.sleep(2)  # Wait for the serial connection to initialize
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# SERIAL_PORT = '/dev/ttyUSB0'  # Change this to your Arduino's COM port
+# BAUD_RATE = 9600
+# arduino = serial.Serial(SERIAL_PORT, BAUD_RATE)
 
 @app.get("/sensordata")
-async def get_sensor_data():
-    # Read sensor data from Arduino
-    if arduino.in_waiting > 0:
-        line = arduino.readline().decode('utf-8').rstrip()  # Read the line from Arduino
-        return {"sensor_data": line}
-    else:
-        return {"error": "No data available"}
+async def getsensordata():
+    return JSONResponse(
+        status_code=200,
+        content={
+            "moistureLevel": 33.00, 
+            "phLevel": 6.21,
+            "crops" : "Tomato"
+        }
+    )
 
-@app.on_event("shutdown")
-def shutdown_event():
-    arduino.close()  # Close the serial connection on shutdown
+    # try:
+    #     if arduino.in_waiting > 0:
+    #         line = arduino.readline().decode('utf-8').rstrip()  
+
+    #         return JSONResponse(
+    #             status_code=200,
+    #             content=line
+    #         )
+    #     else:
+    #         return JSONResponse(
+    #             status_code=204,
+    #             content={
+    #                 "message": "No sensor data available"
+    #             }
+    #         )
+    # except Exception as e:
+    #     return JSONResponse(
+    #         status_code=500,
+    #         content={
+    #             "error": f"Internal Server Error: {str(e)}"
+    #         }
+    #     )
