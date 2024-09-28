@@ -104,6 +104,26 @@
             height: 24px;
         }
 
+        .prompt-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px; /* Reducing the space above the chat form */
+        }
+
+        .prompt-button {
+            padding: 8px 12px;
+            background-color: #3b82f62c;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .prompt-button:hover {
+            background-color: #2563eb;
+        }
+
         /* Enhancements for chat layout */
         .chat-wrapper {
             display: flex;
@@ -160,13 +180,21 @@
     </style>
 </head>
 <body class="bg-[#0d1727] text-white font-sans flex flex-col min-h-screen">
-<div class="max-w-sm mx-auto p-5 flex-grow">
+<div class="max-w-sm p-5 flex-grow relative">
     <div class="chatbox p-4 md:p-6" id="chatbox">
         <div class="placeholder-message" id="placeholder">
             <h2 class="heading">कृषि सम्बन्धी कुनै पनि कुरा सोध्नुस्।</h2>
         </div>
     </div>
 
+    <!-- Prompt Buttons Section -->
+    <div class="prompt-buttons fixed bottom-40 z-10 left-2 grid grid-cols-2 sm:grid-cols-3">
+        <button class="prompt-button" value='1' data-prompt="How to farm cucumber?"> How to farm cucumber?</button>
+        <button class="prompt-button" value='2' data-prompt="How to farm corn?"> How to farm corn?</button>
+        <button class="prompt-button" value='3' data-prompt="How to farm tomato?"> How to farm tomato?</button>
+    </div>
+
+    <!-- Chat Form Section -->
     <div class="chat-form-container max-w-sm">
         <form id="chatForm" class="flex items-center w-full pb-4">
             <a href="/scan" class='text-3xl p-2'><i class='bx bx-scan'></i></a>
@@ -176,93 +204,146 @@
             </div>
         </form>
     </div>
-    
+
     @include('footer')
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const chatForm = document.getElementById('chatForm');
-        const chatbox = document.getElementById('chatbox');
-        const placeholder = document.getElementById('placeholder');
 
-        let spinner; // Define spinner element
+document.addEventListener('DOMContentLoaded', function () {
+    const chatForm = document.getElementById('chatForm');
+    const chatbox = document.getElementById('chatbox');
+    const placeholder = document.getElementById('placeholder');
+    const promptButtons = document.querySelectorAll('.prompt-button'); // Select prompt buttons
+    let spinner; // Define spinner element
 
-        // Function to display messages
-        function displayMessage(message, isUser = true) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = isUser ? 'user-message' : 'bot-message';
-            messageDiv.innerHTML = message;
-            chatbox.appendChild(messageDiv);
-            chatbox.scrollTop = chatbox.scrollHeight;
+    // Function to display messages
+    function displayMessage(message, isUser = true) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = isUser ? 'user-message' : 'bot-message';
+        messageDiv.innerHTML = message;
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight;
 
-            // Hide placeholder if there's at least one message
-            if (chatbox.children.length > 1) {
-                placeholder.style.opacity = '0'; // Fade out effect
-                setTimeout(() => {
-                    placeholder.style.display = 'none';
-                }, 500);
+        // Hide placeholder if there's at least one message
+        if (chatbox.children.length > 1) {
+            placeholder.style.opacity = '0'; // Fade out effect
+            setTimeout(() => {
+                placeholder.style.display = 'none';
+            }, 500);
+        }
+    }
+
+    // Function to display the preloader spinner
+    function showSpinner() {
+        spinner = document.createElement('div');
+        spinner.className = 'spinner-container';
+        spinner.innerHTML = '<div class="spinner"></div>';
+        chatbox.appendChild(spinner);
+        chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+    }
+
+    // Function to remove the preloader spinner
+    function hideSpinner() {
+        if (spinner) {
+            chatbox.removeChild(spinner);
+            spinner = null;
+        }
+    }
+
+    // Function to send a message to the bot (API request)
+    async function sendMessageToBot(message) {
+        // Display user message in the chatbox
+        displayMessage(message, true);
+
+        // Show spinner while waiting for the bot's response
+        showSpinner();
+
+        // Make API request to FastAPI backend
+        try {
+            const response = await fetch('http://localhost:8001/chat/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ question: message }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Hide spinner before showing bot response
+                hideSpinner();
+
+                // Display bot's response in the chatbox
+                displayMessage(data.response, false);
+            } else {
+                console.error('Error in fetching response:', response.statusText);
             }
+        } catch (error) {
+            hideSpinner(); // Ensure spinner is hidden on error
+            console.error('Error:', error);
+        }
+    }
+
+    // Handle static responses for prompt buttons
+    async function handlePromptResponse(buttonValue) {
+        let response;
+
+        // Static responses based on button value
+        switch (buttonValue) {
+            case '1':
+                response = 'Cucumber farming requires moderate temperatures, adequate water supply, and well-drained soil.';
+                break;
+            case '2':
+                response = 'Corn farming is best done in warm climates with well-drained soil and requires regular irrigation.';
+                break;
+            case '3':
+                response = 'Tomato farming thrives in warm weather and well-drained soil with adequate sunlight and water.';
+                break;
+            default:
+                response = 'Invalid prompt selection.';
         }
 
-        // Function to display the preloader spinner
-        function showSpinner() {
-            spinner = document.createElement('div');
-            spinner.className = 'spinner-container';
-            spinner.innerHTML = '<div class="spinner"></div>';
-            chatbox.appendChild(spinner);
-            chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
-        }
+        // Display the prompt as a user message
+        displayMessage(`How to farm ${buttonValue === '1' ? 'cucumber' : buttonValue === '2' ? 'corn' : 'tomato'}?`, true);
 
-        // Function to remove the preloader spinner
-        function hideSpinner() {
-            if (spinner) {
-                chatbox.removeChild(spinner);
-                spinner = null;
-            }
-        }
+        // Show spinner for 2 seconds before displaying the static response
+        showSpinner();
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
 
-        chatForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const messageInput = document.getElementById('message');
-            const message = messageInput.value;
+        // Hide the spinner
+        hideSpinner();
 
-            // Clear input
-            messageInput.value = '';
+        // Display the static response in chat format
+        displayMessage(response, false);
+    }
 
-            // Display user message in the chatbox
-            displayMessage(message, true);
+    // Form submission (manual message)
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const messageInput = document.getElementById('message');
+        const message = messageInput.value;
 
-            // Show spinner while waiting for the bot's response
-            showSpinner();
+        // Clear input
+        messageInput.value = '';
 
-            // Make API request to FastAPI backend
-            try {
-                const response = await fetch('http://127.0.0.1:8001/chat/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ question: message }),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    // Hide spinner before showing bot response
-                    hideSpinner();
-
-                    // Display bot's response in the chatbox
-                    displayMessage(data.response, false);
-                } else {
-                    console.error('Error in fetching response:', response.statusText);
-                }
-            } catch (error) {
-                hideSpinner(); // Ensure spinner is hidden on error
-                console.error('Error:', error);
-            }
-        });
+        // Send the user's message to the bot (dynamic response)
+        sendMessageToBot(message);
     });
+
+    // Event listeners for the prompt buttons (static responses)
+    promptButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const buttonValue = button.value; // Get the button value
+            handlePromptResponse(buttonValue);
+            promptButtons.forEach(btn => btn.style.display = 'none');
+            // Send static response based on value
+        });
+
+    });
+});
+
 </script>
 </body>
 </html>

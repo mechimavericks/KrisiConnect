@@ -23,8 +23,9 @@
         <div class="p-6">
             <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
             <p class="text-lg mb-4">{{ $product->description }}</p>
-            <p class="text-xl font-semibold mb-4">Price: ${{ $product->price }}</p>
-            <p class="text-md text-gray-700 mb-4">Seller: {{ $product->user->name }}</p>
+            <p class="text-xl font-semibold mb-4">
+            मूल्य: {{ $product->price }}</p>
+            <p class="text-md text-gray-700 mb-4">बिक्रेता: {{ $product->user->name }}</p>
             <div class="flex space-x-4 mt-4">
                 <a href="{{ route('marketplace.index') }}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">Back to Marketplace</a>
                 <a href="tel:9824027168" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">Call Seller</a>
