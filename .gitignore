@@ -20,7 +20,10 @@
 /IOT/.env
 /IOT/temp.py
 
-/IOT
+# /IOT
+/IOT/__pycache__
+/IOT/venv
+/IOT/Ultrasonic.py
 # .env
 
 
