@@ -43,10 +43,9 @@ async def get_recommendation():
             "ph_level": ph_level,
             "recommendation": recommendation
         })
-    except FileNotFoundError:
+    except Exception as e:
         return JSONResponse({"error": "No data available. Please send data first."}, status_code=404)
-    except json.JSONDecodeError:
-        return JSONResponse({"error": "Invalid JSON data in file."}, status_code=500)
+    
 
 def recommend_crop(moisture, ph):
     if 30 <= moisture <= 40 and 5.5 <= ph <= 6.5:
