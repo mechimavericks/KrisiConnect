@@ -286,6 +286,12 @@ To install and configure KrisiConnect, follow these steps:
 
 For any questions, support, or inquiries, please contact our team at [meprazhant@gmail.com](mailto:meprazhant@gmail.com), [sanketshiwakoti2@gmail.com](mailto:sanketshiwakoti2@gmail.com), [shameerkharel2@gmail.com](mailto:shameerkharel2@gmail.com), [santoshvandari100@gmail.com](mailto:santoshvandari100@gmail.com)
 
+## Contributing
+We welcome contributions! If you'd like to contribute to this Mero Share IPO Filler Script, please check out our [Contribution Guidelines](Contribution.md).
+
+## Code of Conduct
+Please review our [Code of Conduct](CodeOfConduct.md) before participating in this Script.
+
 ## License
 
 KrisiConnect is released as an open-source collaboration and customization.
