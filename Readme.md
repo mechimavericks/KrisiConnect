@@ -296,6 +296,3 @@ Please review our [Code of Conduct](CodeOfConduct.md) before participating in th
 
 KrisiConnect is released as an open-source collaboration and customization.
 
-## Disclaimer
-
-KrisiConnect is a tool designed to enhance highway safety, but it is not a replacement for responsible driving and existing safety measures. Always prioritize safe driving practices and follow local traffic laws when using the road.
